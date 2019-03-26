@@ -1,0 +1,11 @@
+.mat-form-field {
+    width: 100%;
+}
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+}
+.profile-content {
+    max-width: 650px;
+    margin: auto;
+    margin-top: 20px;
+}

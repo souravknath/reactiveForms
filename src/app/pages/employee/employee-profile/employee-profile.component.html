@@ -1,0 +1,125 @@
+<div class="container">
+  <div class="profile-content">
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-md-2"><label for="name">Name</label></div>
+        <div class="col-md-10">
+          <mat-form-field>
+            <!-- <label for="name">Name</label> -->
+            <input matInput type="text" formControlName="name">
+            <mat-error>
+              Please provide name.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">Phone No</div>
+        <div class="col-md-10">
+          <mat-form-field>
+            <!-- <label for="name">Phone No</label> -->
+            <input matInput type="tel" formControlName="phone">
+            <mat-error>
+              Please provide phoneno.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">Email</div>
+        <div class="col-md-10">
+          <mat-form-field>
+            <input matInput type="email" formControlName="email">
+            <mat-error>
+              Please enter email.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">Date</div>
+        <div class="col-md-10">
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker" formControlName="entrydate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">Gender</div>
+        <div class="col-md-10">
+          <mat-radio-group formControlName="gender">
+            <mat-radio-button value="Male">Male</mat-radio-button>
+            <mat-radio-button value="Female">Female</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">Blod Group</div>
+        <div class="col-md-10">
+          <mat-form-field>
+            <mat-select formControlName="blodgroup">
+              <mat-option value="A">A</mat-option>
+              <mat-option value="AB">AB</mat-option>
+              <mat-option value="O">O</mat-option>
+            </mat-select>
+            <mat-error>
+              please select blod group
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      Skill <button mat-raised-button type="button" (click)="addSkill()">+</button>
+      <div formArrayName="skills" class="skill-content" >
+        <div *ngFor="let item of skillArray.controls; let i = index" [formGroupName]="i" >
+            
+          <div style="border:1px solid;padding: 5px;margin: 5px;">
+              <button mat-raised-button type="button" (click)="removeSkill(i)">-</button>
+              <div class="row">
+                  <div class="col-md-2">Techknowlogy</div>
+                  <div class="col-md-10">
+                    <mat-form-field>
+                      <input matInput formControlName="technology">
+                      <mat-error>
+                        please enter technology
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-2">Experience</div>
+                  <div class="col-md-10">
+                    <mat-form-field>
+                      <input matInput formControlName="experience">
+                      <mat-error>
+                        please enter experience
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- <mat-form-field>
+        <label>Favorite car</label>
+        <mat-select formControlName="car" name="car">
+          <mat-option value="" selected></mat-option>
+          <mat-option *ngFor="let car of cars" [value]="car.value">
+            {{car.viewValue}}
+          </mat-option>
+        </mat-select>
+        <mat-error>
+          please select car
+        </mat-error>
+      </mat-form-field> -->
+      <div class="text-center">
+        <button mat-raised-button type="submit">Submit</button>
+        <button mat-raised-button type="submit">Reset</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<div class="container">
+  <div>
+    <h2>Registration</h2>
+    <form [formGroup]="registrationForm">
+      <mat-form-field>
+        <input matInput type="text" formControlName="firstname" placeholder="First Name">
+        <mat-error *ngIf="registrationForm.controls.firstname.hasError">
+          Please enter first name
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" formControlName="lastname" placeholder="First Last">
+        <mat-error *ngIf="registrationForm.controls.lastname.hasError">
+          Please enter last name
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <textarea matInput formControlName="address" placeholder="Address"></textarea>
+        <mat-error *ngIf="registrationForm.controls.address.hasError.minimum">
+          Please enter minimum character
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="tel" formControlName="contact" placeholder="Contact Number">
+        <mat-error *ngIf="registrationForm.controls.contact.hasError">
+          Please enter contact
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="email" placeholder="Email" formControlName="email" [errorStateMatcher]="matcher">
+        <mat-hint>Errors appear instantly!</mat-hint>
+        <mat-error
+          *ngIf="registrationForm.controls.email.hasError && !registrationForm.controls.email.hasError('required')">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="registrationForm.controls.email.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" formControlName="webaddress" placeholder="Web Address">
+        <mat-error *ngIf="registrationForm.controls.webaddress.hasError">
+          Please enter webaddress
+        </mat-error>
+      </mat-form-field>
+    </form>
+    <button mat-raised-button type="submit" [disabled]="!registrationForm.valid" (click)="submit()">Submit</button>
+  </div>
+</div>
