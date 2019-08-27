@@ -1,0 +1,18 @@
+<div class="container">
+  <table class="table">
+    <th>Product</th>
+    <th>Total</th>
+    <th>Price</th>
+    <tr *ngFor="let item of productList">
+      <td><strong>{{item.name}}</strong><br>{{item.description}}</td>
+      <td><button class="cart-buttom" (click)="substraction(item)">-</button><span style="padding: 10px;width: 50px;">{{item.count}}</span><button class="cart-buttom" (click)="addition(item)">+</button></td>
+      <td>{{item.price}}</td>
+    </tr>
+    <tfoot> <tr>
+        <td>Total</td>
+        <td>250</td>
+        <td>100</td>
+      </tr>
+      </tfoot>
+  </table>
+</div>

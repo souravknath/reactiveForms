@@ -1,0 +1,36 @@
+<div class="container">
+  <h2>UP</h2>
+  <div style="display: flex;padding: 5px;background: yellowgreen;">
+    <div style="padding: 5px;margin-right: 5px;border: solid 1px floralwhite;" *ngFor="let product of resistance">
+      {{product}}</div>
+  </div>
+  <div style="display: flex;padding: 5px;background:red;">
+    <div style="padding: 5px;margin-right: 5px;border: solid 1px floralwhite;" *ngFor="let product of support">
+      {{product}}</div>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Stock</th>
+        <th>Open</th>
+        <th>High</th>
+        <th>Low</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of ganerList?.data" (click)="clickToStock(product.symbol)">
+        <td>{{product.symbol}}</td>
+        <td>{{product.openPrice}}</td>
+        <td>{{product.highPrice}}</td>
+        <td>{{product.lowPrice}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="chartData">
+  <!-- <div id="my_dataviz"></div> -->
+  <ng-container>
+    <app-line-chart [data]="data"></app-line-chart>
+  </ng-container>
+</div>

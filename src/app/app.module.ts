@@ -12,13 +12,20 @@ import { RegistrationComponent } from './pages/registration/registration/registr
 import { EmployeeProfileComponent } from './pages/employee/employee-profile/employee-profile.component';
 import { ToastrModule } from 'ngx-toastr';
 import {CommonModule} from '@angular/common';
+import { ProductListComponent } from './pages/product-list/product-list.component';
+import { SknTraderComponent } from './pages/skn-trader/skn-trader.component';
+import { HttpClientModule } from '@angular/common/http';
+import { LineChartComponent } from './pages/line-chart/line-chart.component';
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     LoginComponent,
     RegistrationComponent,
-    EmployeeProfileComponent
+    EmployeeProfileComponent,
+    ProductListComponent,
+    SknTraderComponent,
+    LineChartComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +45,8 @@ import {CommonModule} from '@angular/common';
     FormsModule,
     ReactiveFormsModule,
     ToastrModule.forRoot() ,
-    MatGridListModule
+    MatGridListModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,14 @@
+{
+    "/live_market/*": {
+        "target": "https://www.nseindia.com",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    },
+    "/api/*": {
+        "target": "https://beta.nseindia.com",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    }
+}
