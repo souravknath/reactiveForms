@@ -10,17 +10,19 @@ export class LineChartComponent implements OnInit, OnChanges {
   @ViewChild('lineChart') private chartContainer: ElementRef;
 
 
+  @Input("resistance") resistance;
+  @Input("support") support;
 
 
   constructor(private hostRef: ElementRef) { }
 
   ngOnInit() {
     console.log(this.datum);
-    this.createChart()
+    this.createChart1()
   }
   ngOnChanges() {
     console.log(this.datum);
-    this.createChart()
+    this.createChart1()
   }
   createChart() {
     var data = []
@@ -39,10 +41,11 @@ export class LineChartComponent implements OnInit, OnChanges {
 
     // parse the date / time
     //var parseTime = d3.timeParse("%d-%b-%y");
-
+    var xDomain = d3.extent(data, function (d) { return new Date(d.date); })
+    var yDomain = d3.extent(data, function (d) { return d.value; });
     // set the ranges
     var x = d3.scaleTime().range([0, width]);
-    var y = d3.scaleLinear().range([height, 0]);
+    var y = d3.scaleLinear().range([height, 0]).domain(yDomain);
 
     // define the line
     var valueline = d3.line()
@@ -59,29 +62,20 @@ export class LineChartComponent implements OnInit, OnChanges {
       .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
 
+
+
     // Add X axis --> it is a date format
     var x = d3.scaleTime()
-      .domain(d3.extent(data, function (d) { return d.date; }))
+      .domain(xDomain)
       .range([0, width]);
 
     svg.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x));
 
-    var today = new Date();
-    var dd = today.getDate();    //<<===== no need
-    var mm = today.getMonth() + 1; //January is 0!   //<<===== no need
-    var yyyy = today.getFullYear();  //<<===== no need
 
 
-    svg.append("line")
-      .attr("x1",1)  //<<== change your code here
-      .attr("y1", 300)
-      .attr("x2", 2000)  //<<== and here
-      .attr("y2", 300)
-      .style("stroke-width", 2)
-      .style("stroke", "red")
-      .style("fill", "none");
+
 
     // Add Y axis
     var y = d3.scaleLinear()
@@ -101,5 +95,197 @@ export class LineChartComponent implements OnInit, OnChanges {
         .y(function (d) { return y(d["value"]) })
       )
 
+    svg.append("line")
+      .attr('x1', x(xDomain[0]))
+      .attr('y1', y(2050))
+      .attr('x2', x(xDomain[1]))
+      .attr('y2', y(2050))
+      .style("stroke-width", 2)
+      .style("stroke", "red")
+      .style("fill", "none")
+
+  }
+  createChart1() {
+
+    // var data = [];
+    // var currentValue = 100;
+    // var random = d3.randomNormal(0, 20.0);
+
+    // for(var i=0; i<100; i++) {
+    //     var currentDate = new Date();
+    //     currentDate.setDate(currentDate.getDate() + i);
+
+    //     data.push([currentDate, currentValue]);
+    //     currentValue = currentValue + random();
+    // }
+    var el = this.chartContainer.nativeElement;
+
+    var drawLineGraph = function (containerHeight, containerWidth, data, yLabel, resistance,support) {
+
+      // let viewportWidth = $(window).width();
+      // let divWidth = $(this.hostRef.nativeElement).parent().width();
+      d3.select(el).selectAll("*").remove();
+      var svg = d3.select(el).append("svg")
+        .attr("width", containerWidth)
+        .attr("height", containerHeight);
+
+      var margin = { top: 50, left: 50, right: 50, bottom: 50 };
+
+      var height = containerHeight - margin.top - margin.bottom;
+      var width = containerWidth - margin.left - margin.right;
+
+      var xDomain = d3.extent(data, function (d) { return Number(d[0]); })
+      var yDomain = d3.extent(data, function (d) { return Number(d[1]); });
+
+      var xScale = d3.scaleTime().range([0, width]).domain(xDomain);
+      var yScale = d3.scaleLinear().range([height, 0]).domain(yDomain);
+
+      var xAxis = d3.axisBottom(xScale);
+      var yAxis = d3.axisLeft(yScale);
+
+      var line = d3.line()
+        .x(function (d) { return xScale(d[0]); })
+        .y(function (d) { return yScale(d[1]); });
+
+      var area = d3.area()
+        .x(function (d) { return xScale(d[0]); })
+        .y0(function (d) { return yScale(d[1]); })
+        .y1(height);
+
+      var g = svg.append('g').attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+      g.append('path')
+        .datum(data)
+        .attr('class', 'area')
+        .attr('d', area);
+
+      g.append('g')
+        .attr('class', 'x axis')
+        .attr('transform', 'translate(0, ' + height + ')')
+        .call(xAxis);
+
+      g.append('g')
+        .attr('class', 'y axis')
+        .call(yAxis)
+        .append('text')
+        .attr('transform', 'rotate(-90)')
+        .attr('y', 6)
+        .attr('dy', '.71em')
+        .attr('text-anchor', 'end')
+        .text(yLabel);
+
+      g.append('path')
+        .datum(data)
+        .attr('class', 'line')
+        .attr('d', line);
+
+      // g.selectAll('circle').data(data).enter().append('circle')
+      //     .attr('cx', function(d) { return xScale(d[0]); })
+      //     .attr('cy', function(d) { return yScale(d[1]); })
+      //     .attr('r', 5)
+      //     .attr('class', 'circle');
+
+      // focus tracking
+
+      var focus = g.append('g').style('display', 'none');
+
+      focus.append('line')
+        .attr('id', 'focusLineX')
+        .attr('class', 'focusLine');
+      focus.append('line')
+        .attr('id', 'focusLineY')
+        .attr('class', 'focusLine');
+      focus.append('circle')
+        .attr('id', 'focusCircle')
+        .attr('r', 5)
+        .attr('class', 'circle focusCircle');
+
+      var bisectDate = d3.bisector(function (d) { return d[0]; }).left;
+
+      g.append('rect')
+        .attr('class', 'overlay')
+        .attr('width', width)
+        .attr('height', height)
+        .on('mouseover', function () { focus.style('display', null); })
+        .on('mouseout', function () { focus.style('display', 'none'); })
+        .on('mousemove', function () {
+          var mouse = d3.mouse(this);
+          var mouseDate = xScale.invert(mouse[0]);
+          var i = bisectDate(data, mouseDate); // returns the index to the current data item
+
+          var d0 = data[i - 1]
+          var d1 = data[i];
+          // work out which date value is closest to the mouse
+          var d = Number(mouseDate) - d0[0] > d1[0] - Number(mouseDate) ? d1 : d0;
+
+          var x = xScale(d[0]);
+          var y = yScale(d[1]);
+
+          focus.select('#focusCircle')
+            .attr('cx', x)
+            .attr('cy', y);
+          focus.select('#focusLineX')
+            .attr('x1', x).attr('y1', yScale(yDomain[0]))
+            .attr('x2', x).attr('y2', yScale(yDomain[1]));
+          focus.select('#focusLineY')
+            .attr('x1', xScale(xDomain[0])).attr('y1', y)
+            .attr('x2', xScale(xDomain[1])).attr('y2', y);
+        });
+
+      // warn line
+
+      // if(warnLine && yDomain[0] < warnLine.lineValue && yDomain[1] > warnLine.lineValue) {
+      resistance.forEach((val,key) => {
+        g.append('line')
+          .attr('x1', xScale(xDomain[0]))
+          .attr('y1', yScale(val.lineValue))
+          .attr('x2', xScale(xDomain[1]))
+          .attr('y2', yScale(val.lineValue))
+          .attr('class', 'zeroline');
+        g.append('text')
+          .attr('x', xScale(xDomain[1]))
+          .attr('y', yScale(val.lineValue))
+          .attr('dy', '1em')
+          .attr('text-anchor', 'end')
+          .text(val.label)
+          .attr('class', 'zerolinetext');
+      });
+      console.log(resistance);
+      console.log(support);
+      
+      support.forEach((val,key) => {
+        g.append('line')
+          .attr('x1', xScale(xDomain[0]))
+          .attr('y1', yScale(val.lineValue))
+          .attr('x2', xScale(xDomain[1]))
+          .attr('y2', yScale(val.lineValue))
+          .attr('class', 'zeroline');
+        g.append('text')
+          .attr('x', xScale(xDomain[1]))
+          .attr('y', yScale(val.lineValue))
+          .attr('dy', '1em')
+          .attr('text-anchor', 'end')
+          .text(val.label)
+          .attr('class', 'zerolinetext');
+      });
+      // }
+      // if(warnLine && yDomain[0] < warnLine.lineValue && yDomain[1] > warnLine.lineValue) {
+      //     g.append('line')
+      //         .attr('x1', xScale(xDomain[0]))
+      //         .attr('y1', yScale(warnLine.lineValue))
+      //         .attr('x2', xScale(xDomain[1]))
+      //         .attr('y2', yScale(warnLine.lineValue))
+      //         .attr('class', 'zeroline');
+      //     g.append('text')
+      //         .attr('x', xScale(xDomain[1]))
+      //         .attr('y', yScale(warnLine.lineValue))
+      //         .attr('dy', '1em')
+      //         .attr('text-anchor', 'end')
+      //         .text(warnLine.label)
+      //         .attr('class', 'zerolinetext');
+      // }
+    };
+
+    drawLineGraph(400, 800, this.datum, "Intensity",this.resistance, this.support);
   }
 }

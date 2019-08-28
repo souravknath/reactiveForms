@@ -33,17 +33,18 @@ export class SknTraderComponent implements OnInit {
       this.data = []
       this.rate = 0;
       let today = new Date()
-     await this.chartData.forEach((d, k) => {
-        // var date = new Date(d[0])
+      await this.chartData.forEach((d, k) => {
+        var dateVal = new Date(d[0])
         var date = new Date(d[0]).getHours() + ":" + new Date(d[0]).getMinutes() + ":" + new Date(d[0]).getSeconds()
         if (date == "15:0:0") {
           this.rate = d[1];
         }
-        let dataValue =new Date(d[0]).getHours() + new Date(d[0]).getMinutes()+new Date(d[0]).getSeconds()
-        this.data.push({ date: Math.round( d[0]), value: d[1] })
+        let dataValue = new Date(d[0]).getHours() + new Date(d[0]).getMinutes() + new Date(d[0]).getSeconds()
+        // this.data.push({ date: Math.round( d[0]), value: d[1] })
+        this.data.push([dateVal, d[1]])
       });
       this.gann()
-      this.createChart()
+      //this.createChart()
 
     });
   }
@@ -56,9 +57,26 @@ export class SknTraderComponent implements OnInit {
     for (squreVal > 1 && (substractNumber = squreVal - 1), i = 1; i <= 25; i++) {
       let matchVal = Math.floor(100 * Math.pow(substractNumber + .125 * (i - 1), 2)) / 100
       if (matchVal < rate) {
-        this.resistance.push(matchVal)
+        if (this.resistance.length < 4) {
+          if (this.resistance.length == 0) {
+            this.resistance.push({ lineValue: matchVal, label: "Open Price" })
+          } else if (this.resistance.length == 1) {
+            this.resistance.push({ lineValue: matchVal, label: "Below sell" })
+          } else {
+            this.resistance.push({ lineValue: matchVal, label: "Support" + i })
+          }
+        }
+
       } else {
-        this.support.push(matchVal)
+        if (this.support.length < 4) {
+          if (this.support.length == 0) {
+            this.support.push({ lineValue: matchVal, label: "Open Price" })
+          } else if (this.support.length == 1) {
+            this.support.push({ lineValue: matchVal, label: "Above buy" })
+          } else {
+            this.support.push({ lineValue: matchVal, label: "Ressitance" + i })
+          }
+        }
       }
       //console.log(Math.floor(100 * Math.pow(substractNumber + .125 * (i - 1), 2)) / 100)
     }
@@ -67,46 +85,5 @@ export class SknTraderComponent implements OnInit {
     // var l = Math.floor((Math.sqrt(rate) - Math.floor(Math.sqrt(rate))) / .125) + 1;
     // console.log(l + "---soura")
   }
-  createChart() {
 
-    var margin = { top: 10, right: 30, bottom: 30, left: 60 },
-      width = 1000 - margin.left - margin.right,
-      height = 400 - margin.top - margin.bottom;
-
-    // append the svg object to the body of the page
-    var svg = d3.select("#my_dataviz")
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
-
-    // Add X axis --> it is a date format
-    var x = d3.scaleTime()
-      .domain(d3.extent(this.data, function (d) { return d.date; }))
-      .range([0, width]);
-      
-    svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
-
-    // Add Y axis
-    var y = d3.scaleLinear()
-      .domain([d3.min(this.data, function (d) { return d.value; }), d3.max(this.data, function (d) { return d.value; })])
-      .range([height,0]);
-    svg.append("g")
-      .call(d3.axisLeft(y));
-
-    // Add the line
-    svg.append("path")
-      .datum(this.data)
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 1.5)
-      .attr("d", d3.line()
-        .x(function (d) { return x(Number(d["date"])) })
-        .y(function (d) { return y(d["value"]) })
-      )
-  }
 }

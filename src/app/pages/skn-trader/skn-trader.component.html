@@ -2,11 +2,11 @@
   <h2>UP</h2>
   <div style="display: flex;padding: 5px;background: yellowgreen;">
     <div style="padding: 5px;margin-right: 5px;border: solid 1px floralwhite;" *ngFor="let product of resistance">
-      {{product}}</div>
+      {{product.lineValue}}</div>
   </div>
   <div style="display: flex;padding: 5px;background:red;">
     <div style="padding: 5px;margin-right: 5px;border: solid 1px floralwhite;" *ngFor="let product of support">
-      {{product}}</div>
+      {{product.lineValue}}</div>
   </div>
   <table class="table table-striped">
     <thead>
@@ -31,6 +31,6 @@
 <div *ngIf="chartData">
   <!-- <div id="my_dataviz"></div> -->
   <ng-container>
-    <app-line-chart [data]="data"></app-line-chart>
+    <app-line-chart [data]="data" [resistance]="resistance" [support]="support"></app-line-chart>
   </ng-container>
 </div>
