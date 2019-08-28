@@ -6,12 +6,15 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 export class SknTraderService {
 
   constructor(private httpClient: HttpClient) { }
-
-  get_products() {
+  
+  getGainer() {
     return this.httpClient.get('/live_market/dynaContent/live_analysis/gainers/niftyGainers1.json');
     // return this.httpClient.get('/assets/data.json')
   }
-
+  getLoser() {
+    return this.httpClient.get('/live_market/dynaContent/live_analysis/losers/niftyLosers1.json');
+    // return this.httpClient.get('/assets/data.json')
+  }
   getData(id){
     const params = new HttpParams().set('index', id+"EQN")
     return this.httpClient.get('/api/chart-databyindex',{params})

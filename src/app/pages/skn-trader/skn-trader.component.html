@@ -1,13 +1,6 @@
 <div class="container">
   <h2>UP</h2>
-  <div style="display: flex;padding: 5px;background: yellowgreen;">
-    <div style="padding: 5px;margin-right: 5px;border: solid 1px floralwhite;" *ngFor="let product of resistance">
-      {{product.lineValue}}</div>
-  </div>
-  <div style="display: flex;padding: 5px;background:red;">
-    <div style="padding: 5px;margin-right: 5px;border: solid 1px floralwhite;" *ngFor="let product of support">
-      {{product.lineValue}}</div>
-  </div>
+
   <table class="table table-striped">
     <thead>
       <tr>
@@ -18,19 +11,36 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of ganerList?.data" (click)="clickToStock(product.symbol)">
+      <tr style="color: #320ed6af;" *ngFor="let product of ganerList?.data" (click)="clickToStock(product.symbol)">
         <td>{{product.symbol}}</td>
         <td>{{product.openPrice}}</td>
         <td>{{product.highPrice}}</td>
         <td>{{product.lowPrice}}</td>
       </tr>
+      <tr style="color: red;" *ngFor="let loser of loserList?.data" (click)="clickToStock(loser.symbol)">
+        <td>{{loser.symbol}}</td>
+        <td>{{loser.openPrice}}</td>
+        <td>{{loser.highPrice}}</td>
+        <td>{{loser.lowPrice}}</td>
+      </tr>
     </tbody>
   </table>
-</div>
 
-<div *ngIf="chartData">
-  <!-- <div id="my_dataviz"></div> -->
-  <ng-container>
-    <app-line-chart [data]="data" [resistance]="resistance" [support]="support"></app-line-chart>
-  </ng-container>
+  <div>Open Price- {{rate}}</div>
+
+  <div style="display: flex;padding: 5px;background: green;color: #ffffff;">
+    <div style="padding: 5px;margin-right: 5px;border: solid 1px #ffffff;" *ngFor="let product of support">
+      {{product.lineValue}}</div>
+  </div>
+  <div style="display: flex;padding: 5px;background: #f04167;color: #ffffff;">
+    <div style="padding: 5px;margin-right: 5px;border: solid 1px #ffffff;"
+      *ngFor="let product of resistance.reverse()">
+      {{product.lineValue}}</div>
+  </div>
+  <div *ngIf="chartData" style="width: 100%">
+    <!-- <div id="my_dataviz"></div> -->
+    <ng-container>
+      <app-line-chart [data]="data" [resistance]="resistance" [support]="support"></app-line-chart>
+    </ng-container>
+  </div>
 </div>

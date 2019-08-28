@@ -13,13 +13,16 @@ export class SknTraderComponent implements OnInit {
   support = [];
   data: any[];
   rate: number;
+  loserList: Object;
 
   constructor(public skntraderService: SknTraderService) { }
 
   ngOnInit() {
-    this.skntraderService.get_products().subscribe((res) => {
+    this.skntraderService.getGainer().subscribe((res) => {
       this.ganerList = res
-      console.log(res);
+    });
+    this.skntraderService.getLoser().subscribe((res) => {
+      this.loserList = res
     });
 
   }
@@ -55,27 +58,22 @@ export class SknTraderComponent implements OnInit {
     for (squreVal > 1 && (substractNumber = squreVal - 1), i = 1; i <= 25; i++) {
       let matchVal = Math.floor(100 * Math.pow(substractNumber + .125 * (i - 1), 2)) / 100
       if (matchVal < rate) {
-        if (this.resistance.length < 2) {
-          if (this.resistance.length == 0) {
-            this.resistance.push({ lineValue: this.rate, label: "Open Price" })
-          } else if (this.resistance.length == 1) {
-            this.resistance.push({ lineValue: matchVal, label: "Below sell" })
-          } else {
-            this.resistance.push({ lineValue: matchVal, label: "Support" + i })
-          }
-        }
-
-      } else {
-        if (this.support.length < 1) {
-           if (this.support.length == 1) {
-            this.support.push({ lineValue: matchVal, label: "Above buy" })
-          } else {
-            this.support.push({ lineValue: matchVal, label: "Ressitance" + i })
-          }
+        this.resistance.push({ lineValue: matchVal, label: "Ressitance-" + matchVal })
+        if (this.resistance.length > 3) {
+          this.resistance.splice(0, 1)
         }
       }
+      if (matchVal > rate) {
+        this.support.push({ lineValue: matchVal, label: "Support-" + matchVal })
+        if (this.support.length > 3) {
+          this.support.pop()
+        }
+      }
+
       //console.log(Math.floor(100 * Math.pow(substractNumber + .125 * (i - 1), 2)) / 100)
     }
+
+    this.resistance.push({ lineValue: this.rate, label: "Open Price-" + this.rate })
     // let squreFloorVal = Math.floor(100 * Math.pow(substractNumber + .125 * (i - 1), 2)) / 100
     console.log(this.rate + "---nath")
     // var l = Math.floor((Math.sqrt(rate) - Math.floor(Math.sqrt(rate))) / .125) + 1;
