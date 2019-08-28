@@ -44,8 +44,6 @@ export class SknTraderComponent implements OnInit {
         this.data.push([dateVal, d[1]])
       });
       this.gann()
-      //this.createChart()
-
     });
   }
   gann() {
@@ -57,9 +55,9 @@ export class SknTraderComponent implements OnInit {
     for (squreVal > 1 && (substractNumber = squreVal - 1), i = 1; i <= 25; i++) {
       let matchVal = Math.floor(100 * Math.pow(substractNumber + .125 * (i - 1), 2)) / 100
       if (matchVal < rate) {
-        if (this.resistance.length < 4) {
+        if (this.resistance.length < 2) {
           if (this.resistance.length == 0) {
-            this.resistance.push({ lineValue: matchVal, label: "Open Price" })
+            this.resistance.push({ lineValue: this.rate, label: "Open Price" })
           } else if (this.resistance.length == 1) {
             this.resistance.push({ lineValue: matchVal, label: "Below sell" })
           } else {
@@ -68,10 +66,8 @@ export class SknTraderComponent implements OnInit {
         }
 
       } else {
-        if (this.support.length < 4) {
-          if (this.support.length == 0) {
-            this.support.push({ lineValue: matchVal, label: "Open Price" })
-          } else if (this.support.length == 1) {
+        if (this.support.length < 1) {
+           if (this.support.length == 1) {
             this.support.push({ lineValue: matchVal, label: "Above buy" })
           } else {
             this.support.push({ lineValue: matchVal, label: "Ressitance" + i })

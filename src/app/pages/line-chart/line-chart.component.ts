@@ -236,7 +236,8 @@ export class LineChartComponent implements OnInit, OnChanges {
 
       // if(warnLine && yDomain[0] < warnLine.lineValue && yDomain[1] > warnLine.lineValue) {
       resistance.forEach((val,key) => {
-        g.append('line')
+        setTimeout(() => {
+          g.append('line')
           .attr('x1', xScale(xDomain[0]))
           .attr('y1', yScale(val.lineValue))
           .attr('x2', xScale(xDomain[1]))
@@ -249,11 +250,14 @@ export class LineChartComponent implements OnInit, OnChanges {
           .attr('text-anchor', 'end')
           .text(val.label)
           .attr('class', 'zerolinetext');
+        }, 200);
+       
       });
       console.log(resistance);
       console.log(support);
       
       support.forEach((val,key) => {
+        setTimeout(() => {
         g.append('line')
           .attr('x1', xScale(xDomain[0]))
           .attr('y1', yScale(val.lineValue))
@@ -267,6 +271,7 @@ export class LineChartComponent implements OnInit, OnChanges {
           .attr('text-anchor', 'end')
           .text(val.label)
           .attr('class', 'zerolinetext');
+        },500)
       });
       // }
       // if(warnLine && yDomain[0] < warnLine.lineValue && yDomain[1] > warnLine.lineValue) {
