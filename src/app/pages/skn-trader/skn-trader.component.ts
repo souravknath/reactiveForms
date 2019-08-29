@@ -14,6 +14,7 @@ export class SknTraderComponent implements OnInit {
   data: any[];
   rate: number;
   loserList: Object;
+  stockName: any;
 
   constructor(public skntraderService: SknTraderService) { }
 
@@ -27,6 +28,7 @@ export class SknTraderComponent implements OnInit {
 
   }
   clickToStock(id) {
+    this.stockName = id;
     this.skntraderService.getData(id).subscribe(async (res) => {
 
       //https://www.charanwings.com/gann-intraday-calculator
