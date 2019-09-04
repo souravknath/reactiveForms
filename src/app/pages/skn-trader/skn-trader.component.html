@@ -1,43 +1,55 @@
 <div class="container">
-  <h2>UP</h2>
+  <h2>UP = {{count}}</h2>
 
   <table class="table table-striped">
     <thead>
       <tr>
         <th>Stock</th>
+        <th>signal</th>
         <th>Open</th>
         <th>High</th>
         <th>Low</th>
+        <th>LTP</th>
+        <th>% Change</th>
+        <th>Target-1</th>
+        <th>Target-2</th>
+        <th>Target-3</th>
       </tr>
     </thead>
     <tbody>
-      <tr style="color: #320ed6af;" *ngFor="let product of ganerList?.data" (click)="clickToStock(product.symbol)">
+      <tr style="color:#030108af;" *ngFor="let product of StockListDetails" (click)="clickToStock(product.symbol,product.open)" 
+      [ngClass]="{ 'green':product.ltP > product.target1 && product.target1 > product.open,'orange':product.ltP > product.target2 && product.target2 > product.open,'red':product.ltP < product.target1 && product.target1 < product.open,'pink':product.ltP < product.target2 && product.target2 < product.open }">
         <td>{{product.symbol}}</td>
-        <td>{{product.openPrice}}</td>
-        <td>{{product.highPrice}}</td>
-        <td>{{product.lowPrice}}</td>
+        <td>{{product.signal}}</td>
+        <td>{{product.open}}</td>
+        <td>{{product.high}}</td>
+        <td>{{product.low}}</td>
+        <td>{{product.ltP}}</td>
+        <td>{{product.ptsC}}</td>
+        <td>{{product.target1}}</td>
+        <td>{{product.target2}}</td>
+        <td>{{product.target3}}</td>
       </tr>
       <tr style="color: red;" *ngFor="let loser of loserList?.data" (click)="clickToStock(loser.symbol)">
         <td>{{loser.symbol}}</td>
         <td>{{loser.openPrice}}</td>
         <td>{{loser.highPrice}}</td>
         <td>{{loser.lowPrice}}</td>
+        <td>{{loser.netPrice}}</td>
       </tr>
     </tbody>
   </table>
-
   <div>Open Price- {{rate}}</div>
-
-  <div style="display: flex;padding: 5px;background: green;color: #ffffff;">
+  <div style="display: flex;padding: 5px;background: #008000;color: #ffffff;">
     <div style="padding: 5px;margin-right: 5px;border: solid 1px #ffffff;" *ngFor="let product of support">
       {{product.lineValue}}</div>
   </div>
-  <div style="display: flex;padding: 5px;background: #f04167;color: #ffffff;">
+  <div style="display: flex;padding: 5px;background: #f6315c;color: #ffffff;">
     <div style="padding: 5px;margin-right: 5px;border: solid 1px #ffffff;"
       *ngFor="let product of resistance.reverse()">
       {{product.lineValue}}</div>
   </div>
- <h4>{{stockName}}</h4>
+ <h4>{{stockName}} </h4>
   <div *ngIf="chartData" style="width: 100%">
     <ng-container>
       <app-line-chart [data]="data" [resistance]="resistance" [support]="support"></app-line-chart>

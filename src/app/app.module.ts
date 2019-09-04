@@ -16,6 +16,8 @@ import { ProductListComponent } from './pages/product-list/product-list.componen
 import { SknTraderComponent } from './pages/skn-trader/skn-trader.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LineChartComponent } from './pages/line-chart/line-chart.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,7 +48,8 @@ import { LineChartComponent } from './pages/line-chart/line-chart.component';
     ReactiveFormsModule,
     ToastrModule.forRoot() ,
     MatGridListModule,
-    HttpClientModule
+    HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]

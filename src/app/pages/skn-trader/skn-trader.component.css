@@ -2,3 +2,15 @@
     padding: .0rem !important; 
     cursor: pointer;
 }
+.red {
+    background: red;
+}
+.pink{
+    background: pink;
+}
+.green{
+    background: green;
+}
+.orange{
+    background: orange;
+}
